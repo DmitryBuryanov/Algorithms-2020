@@ -63,6 +63,14 @@ private fun heapify(elements: IntArray, start: Int, length: Int) {
     }
 }
 
+fun main() {
+    val inta = listOf<Int>(1, 8, 3, 19, 7, 2, 8, 17, 98, 76, 8, 34, 65, 78, 99, 109, 987, 564, 87, 1000).toIntArray()
+    mergeSort(inta)
+    for (e in inta.indices) {
+        println(inta[e])
+    }
+}
+
 private fun buildHeap(elements: IntArray) {
     for (start in elements.size / 2 - 1 downTo 0) {
         heapify(elements, start, elements.size)

@@ -2,6 +2,8 @@
 
 package lesson1
 
+import java.io.File
+
 /**
  * Сортировка времён
  *
@@ -33,7 +35,69 @@ package lesson1
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
 fun sortTimes(inputName: String, outputName: String) {
-    TODO()
+
+    val timeList = mutableListOf<String>()
+    for (line in File(inputName).readLines()) {
+        require(line.matches(Regex("[0-2][0-9]:[0-5][0-9]:[0-5][0-9] (PM|AM)")))
+        timeList.add(line)
+    }
+
+    fun merge(elements: Array<String>, begin: Int, middle: Int, end: Int) {
+        val left = elements.copyOfRange(begin, middle)
+        val right = elements.copyOfRange(middle, end)
+        var li = 0
+        var ri = 0
+        for (i in begin until end) {
+            if (li < left.size && (ri == right.size || compare(left[li], right[ri]) == 0 || compare(
+                    left[li], right[ri]
+                ) == 2)
+            ) {
+                elements[i] = left[li++]
+            } else {
+                elements[i] = right[ri++]
+            }
+        }
+    }
+
+    fun mergeSort(elements: Array<String>, begin: Int, end: Int) {
+        if (end - begin <= 1) return
+        val middle = (begin + end) / 2
+        mergeSort(elements, begin, middle)
+        mergeSort(elements, middle, end)
+        merge(elements, begin, middle, end)
+    }
+
+    fun mergeSort(elements: Array<String>) {
+        mergeSort(elements, 0, elements.size)
+    }
+
+    val timeArray = timeList.toTypedArray()
+    mergeSort(timeArray)
+
+    val writer = File(outputName).bufferedWriter()
+    for (line in timeArray) {
+        writer.write(line)
+        writer.newLine()
+    }
+    writer.close()
+}
+
+fun compare(name1: String, name2: String): Int {
+    val list1 = name1.split(Regex("[: ]"))
+    val list2 = name2.split(Regex("[: ]"))
+    if (list1[3] != list2[3]) {
+        return if (list1[3] == "PM") 1 else 2
+    } else {
+        if (list1[0] != list2[0]) {
+            if (list1[0] == "12") return 2
+            if (list2[0] == "12") return 1
+        }
+        for (i in 0..2) {
+            if (list1[i].toInt() > list2[i].toInt()) return 1
+            else if (list1[i].toInt() < list2[i].toInt()) return 2
+        }
+    }
+    return 0
 }
 
 /**
