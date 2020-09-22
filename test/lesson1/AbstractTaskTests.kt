@@ -45,6 +45,24 @@ abstract class AbstractTaskTests : AbstractFileTests() {
         } finally {
             File("temp.txt").delete()
         }
+        try {
+            sortTimes("input/time_in4.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                     12:40:31 AM
+                     07:26:57 AM
+                     10:00:03 AM
+                     10:15:19 AM
+                     01:15:19 PM
+                     04:55:29 PM
+                     07:35:15 PM
+                     10:56:12 PM
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
     }
 
     protected fun sortAddresses(sortAddresses: (String, String) -> Unit) {
@@ -113,6 +131,28 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                     24.7
                     99.5
                     121.3
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            sortTemperatures("input/temp_in2.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                    -120.8
+                    -98.4
+                    -12.6
+                    -12.6
+                    11.0
+                    24.7
+                    29.8
+                    86.9
+                    97.1
+                    99.5
+                    121.3
+                    175.0
                 """.trimIndent()
             )
         } finally {
@@ -273,6 +313,26 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                         32
                         32
                     """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            sortSequence("input/seq_in6.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                    1498
+                    115
+                    97
+                    897
+                    678
+                    2098
+                    145
+                    98
+                    35
+                    35
+                """.trimIndent()
             )
         } finally {
             File("temp.txt").delete()

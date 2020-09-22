@@ -174,7 +174,6 @@ fun sortTemperatures(inputName: String, outputName: String) {
         writer.newLine()
     }
     writer.close()
-
 }
 
 fun partition(elements: DoubleArray, min: Int, max: Int): Int {
@@ -265,7 +264,7 @@ fun sortSequence(inputName: String, outputName: String) {
     }
     val writer = File(outputName).bufferedWriter()
     for (line in numberList) {
-        if (line.toInt() != minValueKey) {
+        if (line != minValueKey) {
             writer.write(line.toString())
             writer.newLine()
         }
