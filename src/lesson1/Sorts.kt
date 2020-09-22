@@ -2,7 +2,7 @@ package lesson1
 
 import java.util.*
 
-private val random = Random(Calendar.getInstance().timeInMillis)
+val random = Random(Calendar.getInstance().timeInMillis)
 
 fun <T : Comparable<T>> insertionSort(elements: MutableList<T>) {
     for (i in 1 until elements.size) {
@@ -60,14 +60,6 @@ private fun heapify(elements: IntArray, start: Int, length: Int) {
         elements[max] = elements[start]
         elements[start] = temp
         heapify(elements, max, length)
-    }
-}
-
-fun main() {
-    val inta = listOf<Int>(1, 8, 3, 19, 7, 2, 8, 17, 98, 76, 8, 34, 65, 78, 99, 109, 987, 564, 87, 1000).toIntArray()
-    mergeSort(inta)
-    for (e in inta.indices) {
-        println(inta[e])
     }
 }
 
