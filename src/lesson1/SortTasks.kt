@@ -198,7 +198,7 @@ fun partition(elements: DoubleArray, min: Int, max: Int): Int {
     return right
 }
 
-private fun quickSort(elements: DoubleArray, min: Int, max: Int) {
+fun quickSort(elements: DoubleArray, min: Int, max: Int) {
     if (min < max) {
         val border = partition(elements, min, max)
         quickSort(elements, min, border)
