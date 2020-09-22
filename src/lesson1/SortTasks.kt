@@ -3,6 +3,7 @@
 package lesson1
 
 import java.io.File
+import kotlin.math.min
 
 /**
  * Сортировка времён
@@ -240,7 +241,42 @@ fun quickSort(elements: DoubleArray) {
  * 2
  */
 fun sortSequence(inputName: String, outputName: String) {
-    TODO()
+    val stat = mutableMapOf<Int, Int>()
+    val numberList = mutableListOf<Int>()
+    for (lines in File(inputName).readLines()) {
+        if (stat[lines.toInt()] == null) stat[lines.toInt()] = 1
+        else {
+            val x = stat[lines.toInt()]
+            if (x != null) {
+                stat.replace(lines.toInt(), x + 1)
+            }
+        }
+        numberList.add(lines.toInt())
+    }
+    var minValueKey = Integer.MAX_VALUE
+    var maxValue = 0
+    for ((key, value) in stat) {
+        if (value > maxValue) {
+            maxValue = value
+            minValueKey = key
+        } else if (value == maxValue) {
+            if (key < minValueKey) minValueKey = key
+        }
+    }
+    val numbersToDelete = mutableListOf<Int>()
+    for (i in 1..maxValue) {
+        numbersToDelete.add(minValueKey)
+    }
+    numberList.removeAll(numbersToDelete)
+    for (i in 1..maxValue) {
+        numberList.add(minValueKey)
+    }
+    val writer = File(outputName).bufferedWriter()
+    for (line in numberList) {
+        writer.write(line.toString())
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
