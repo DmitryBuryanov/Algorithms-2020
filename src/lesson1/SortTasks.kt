@@ -263,17 +263,15 @@ fun sortSequence(inputName: String, outputName: String) {
             if (key < minValueKey) minValueKey = key
         }
     }
-    val numbersToDelete = mutableListOf<Int>()
-    for (i in 1..maxValue) {
-        numbersToDelete.add(minValueKey)
-    }
-    numberList.removeAll(numbersToDelete)
-    for (i in 1..maxValue) {
-        numberList.add(minValueKey)
-    }
     val writer = File(outputName).bufferedWriter()
     for (line in numberList) {
-        writer.write(line.toString())
+        if (line.toInt() != minValueKey) {
+            writer.write(line.toString())
+            writer.newLine()
+        }
+    }
+    for (i in 1..maxValue) {
+        writer.write(minValueKey.toString())
         writer.newLine()
     }
     writer.close()
