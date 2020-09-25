@@ -2,6 +2,9 @@
 
 package lesson2
 
+import kotlin.math.ln
+import kotlin.math.sqrt
+
 /**
  * Получение наибольшей прибыли (она же -- поиск максимального подмассива)
  * Простая
@@ -95,7 +98,31 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * вернуть ту из них, которая встречается раньше в строке first.
  */
 fun longestCommonSubstring(first: String, second: String): String {
-    TODO()
+    val table: Array<Array<String>> = Array(first.length + 1) { Array(second.length + 1) { "0" } }
+    for (j in 1..second.length) table[0][j] = second[j - 1].toString()
+    for (i in 1..first.length) table[i][0] = first[i - 1].toString()
+    for (i in 1..first.length) {
+        for (j in 1..second.length) {
+            if (table[i][0] == table[0][j]) table[i][j] = "1"
+        }
+    }
+    var maxLengthStr = ""
+    for (i in 1..first.length) {
+        for (j in 1..second.length) {
+            if (table[i][j] == "1") {
+                var x = i
+                var y = j
+                var newStr = table[0][y]
+                while (x < first.length - 1 && y < second.length - 1) {
+                    x++
+                    y++
+                    if (table[x][y] == "1") newStr += table[x][0] else break
+                }
+                if (newStr.length > maxLengthStr.length) maxLengthStr = newStr
+            }
+        }
+    }
+    return maxLengthStr
 }
 
 /**
@@ -109,5 +136,30 @@ fun longestCommonSubstring(first: String, second: String): String {
  * Единица простым числом не считается.
  */
 fun calcPrimesNumber(limit: Int): Int {
-    TODO()
+    var count = 0
+    if (limit > 1) {
+        for (element in 2..limit) {
+            if (isEazy(element)) count++
+        }
+    }
+    return count
 }
+
+fun isEazy(n: Int): Boolean {
+    if (n < 1) return false
+    if (n in 1..3) return true
+    else {
+        if (n % 2 == 0) return false
+        for (i in 3..sqrt(n.toDouble()).toInt()) {
+            if (n % i == 0) return false
+        }
+    }
+    return true
+}
+
+fun main() {
+
+}
+
+
+
