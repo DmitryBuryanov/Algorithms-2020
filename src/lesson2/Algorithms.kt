@@ -2,7 +2,6 @@
 
 package lesson2
 
-import kotlin.math.ln
 import kotlin.math.sqrt
 
 /**
@@ -97,6 +96,10 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * Если имеется несколько самых длинных общих подстрок одной длины,
  * вернуть ту из них, которая встречается раньше в строке first.
  */
+
+//first.length = m, second.length = n
+//производительность: O(m * n * log(sqrt(m^2 + n^2))
+//ресурсоемкость: O(m * n)
 fun longestCommonSubstring(first: String, second: String): String {
     val table: Array<Array<String>> = Array(first.length + 1) { Array(second.length + 1) { "0" } }
     for (j in 1..second.length) table[0][j] = second[j - 1].toString()
@@ -135,6 +138,9 @@ fun longestCommonSubstring(first: String, second: String): String {
  * Справка: простым считается число, которое делится нацело только на 1 и на себя.
  * Единица простым числом не считается.
  */
+
+//производительность: O((N-1)*(N-3)/2)
+//ресурсоемкость: O(1)
 fun calcPrimesNumber(limit: Int): Int {
     var count = 0
     if (limit > 1) {
@@ -156,10 +162,3 @@ fun isEazy(n: Int): Boolean {
     }
     return true
 }
-
-fun main() {
-
-}
-
-
-

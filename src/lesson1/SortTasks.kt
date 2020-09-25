@@ -3,7 +3,6 @@
 package lesson1
 
 import java.io.File
-import kotlin.math.min
 
 /**
  * Сортировка времён
@@ -35,6 +34,9 @@ import kotlin.math.min
  *
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
+//производительность: O(N*logN)
+//ресурсоемкость: O(2N)
+
 fun sortTimes(inputName: String, outputName: String) {
 
     val timeList = mutableListOf<String>()
@@ -43,6 +45,11 @@ fun sortTimes(inputName: String, outputName: String) {
         timeList.add(line)
     }
 
+    /* В данном файле были написаны функции сортировки, уже имеющиеся в файле Sorts.kt. Я не знал, можно ли изменять код
+в том файле(мне нужно было подавать на вход функции не массив чисел Int, а массивы, хранящие в себе данные других типов)
+и решил переписать их отдельно в этом файле так, чтобы на вход они принимали те элементы, которые нужны мне для
+реализации функции
+ */
     fun merge(elements: Array<String>, begin: Int, middle: Int, end: Int) {
         val left = elements.copyOfRange(begin, middle)
         val right = elements.copyOfRange(middle, end)
@@ -161,6 +168,9 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 99.5
  * 121.3
  */
+//производительность:в зависимости от входных данных может изменяться от O(N) до O(N^2)
+//ресурсоемкость: O(2N)
+
 fun sortTemperatures(inputName: String, outputName: String) {
     val tempList = mutableListOf<Double>()
     for (line in File(inputName).readLines()) {
@@ -239,6 +249,9 @@ fun quickSort(elements: DoubleArray) {
  * 2
  * 2
  */
+
+//производительность: O(N)
+//ресурсоемкость: O(2N)
 fun sortSequence(inputName: String, outputName: String) {
     val stat = mutableMapOf<Int, Int>()
     val numberList = mutableListOf<Int>()
