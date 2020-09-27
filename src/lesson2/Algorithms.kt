@@ -139,7 +139,7 @@ fun longestCommonSubstring(first: String, second: String): String {
  * Единица простым числом не считается.
  */
 
-//производительность: O((N-1)*(N-3)/2)
+//производительность: O((N-1)*(sqrt(N)-3)/2)
 //ресурсоемкость: O(1)
 fun calcPrimesNumber(limit: Int): Int {
     var count = 0
