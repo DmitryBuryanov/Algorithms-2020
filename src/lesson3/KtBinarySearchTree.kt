@@ -30,6 +30,24 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         }
     }
 
+    private fun findParent(node: Node<T>): Node<T>? {
+        var current = root
+        var parent: Node<T>? = null
+        while (current != null) {
+            val result = current.value.compareTo(node.value)
+            if (result > 0) {
+                parent = current
+                current = current.left
+            } else if (result < 0) {
+                parent = current
+                current = current.right
+            } else {
+                break
+            }
+        }
+        return parent
+    }
+
     override operator fun contains(element: T): Boolean {
         val closest = find(element)
         return closest != null && element.compareTo(closest.value) == 0
@@ -80,8 +98,62 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
      * Средняя
      */
     override fun remove(element: T): Boolean {
-        TODO()
+        val current = find(element) ?: return false
+        if (element.compareTo(current.value) != 0)
+            return false
+        val parent = findParent(current)
+        size--
+        if (current.right == null) {
+            if (parent == null) {
+                root = current.left
+            } else {
+                val result = parent.value.compareTo(current.value)
+                if (result > 0) {
+                    parent.left = current.left
+                } else {
+                    if (result < 0) {
+                        parent.right = current.left
+                    }
+                }
+            }
+        } else {
+            if (current.right!!.left == null) {
+                current.right!!.left = current.left
+                if (parent == null) root = current.right else {
+                    val result = parent.value.compareTo(current.value)
+                    if (result > 0) {
+                        parent.left = current.right
+                    } else {
+                        if (result < 0) {
+                            parent.right = current.right
+                        }
+                    }
+                }
+            } else {
+                var leftmost = current.right!!.left
+                var leftmostParent = current.right
+                while (leftmost!!.left != null) {
+                    leftmostParent = leftmost
+                    leftmost = leftmost.left
+                }
+                leftmostParent!!.left = leftmost.right
+                leftmost.left = current.left
+                leftmost.right = current.right
+                if (parent == null) {
+                    root = leftmost
+                } else {
+                    val result = parent.value.compareTo(current.value)
+                    if (result > 0) {
+                        parent.left = leftmost
+                    } else {
+                        if (result < 0) parent.right = leftmost
+                    }
+                }
+            }
+        }
+        return true
     }
+
 
     override fun comparator(): Comparator<in T>? =
         null
