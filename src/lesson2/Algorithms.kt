@@ -98,7 +98,7 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  */
 
 //first.length = m, second.length = n
-//производительность: O(m * n * log(sqrt(m^2 + n^2))
+//производительность: O(m * n)
 //ресурсоемкость: O(m * n)
 fun longestCommonSubstring(first: String, second: String): String {
     val table: Array<Array<String>> = Array(first.length + 1) { Array(second.length + 1) { "0" } }
@@ -109,23 +109,20 @@ fun longestCommonSubstring(first: String, second: String): String {
             if (table[i][0] == table[0][j]) table[i][j] = "1"
         }
     }
-    var maxLengthStr = ""
-    for (i in 1..first.length) {
-        for (j in 1..second.length) {
-            if (table[i][j] == "1") {
-                var x = i
-                var y = j
-                var newStr = table[0][y]
-                while (x < first.length - 1 && y < second.length - 1) {
-                    x++
-                    y++
-                    if (table[x][y] == "1") newStr += table[x][0] else break
-                }
-                if (newStr.length > maxLengthStr.length) maxLengthStr = newStr
+    var maxLength = 0
+    var lastIndex = 0
+    for (i in 1 until first.length) {
+        for (j in 1 until second.length) {
+            if (table[i][j] != "0") {
+                if (table[i + 1][j + 1] != "0") table[i + 1][j + 1] = (table[i][j].toInt() + 1).toString()
+            }
+            if (table[i + 1][j + 1].toInt() > maxLength) {
+                maxLength = table[i + 1][j + 1].toInt()
+                lastIndex = i + 1
             }
         }
     }
-    return maxLengthStr
+    return first.substring(lastIndex - maxLength, lastIndex)
 }
 
 /**
@@ -139,19 +136,19 @@ fun longestCommonSubstring(first: String, second: String): String {
  * Единица простым числом не считается.
  */
 
-//производительность: O((N-1)*(sqrt(N)-3)/2)
+//производительность: O(N*sqrt(N))
 //ресурсоемкость: O(1)
 fun calcPrimesNumber(limit: Int): Int {
     var count = 0
     if (limit > 1) {
         for (element in 2..limit) {
-            if (isEazy(element)) count++
+            if (isPrime(element)) count++
         }
     }
     return count
 }
 
-fun isEazy(n: Int): Boolean {
+fun isPrime(n: Int): Boolean {
     if (n < 1) return false
     if (n in 1..3) return true
     else {

@@ -168,56 +168,21 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 99.5
  * 121.3
  */
-//производительность:в зависимости от входных данных может изменяться от O(N) до O(N^2)
-//ресурсоемкость: O(2N)
+//производительность:в зависимости от входных данных может изменяться от O(N * logN)
+//ресурсоемкость: O(N)
 
 fun sortTemperatures(inputName: String, outputName: String) {
     val tempList = mutableListOf<Double>()
     for (line in File(inputName).readLines()) {
         tempList.add(line.toDouble())
     }
-    val tempArray = tempList.toDoubleArray()
-    quickSort(tempArray)
+    tempList.sort()
     val writer = File(outputName).bufferedWriter()
-    for (line in tempArray) {
+    for (line in tempList) {
         writer.write(line.toString())
         writer.newLine()
     }
     writer.close()
-}
-
-fun partition(elements: DoubleArray, min: Int, max: Int): Int {
-    val x = elements[min + random.nextInt(max - min + 1)]
-    var left = min
-    var right = max
-    while (left <= right) {
-        while (elements[left] < x) {
-            left++
-        }
-        while (elements[right] > x) {
-            right--
-        }
-        if (left <= right) {
-            val temp = elements[left]
-            elements[left] = elements[right]
-            elements[right] = temp
-            left++
-            right--
-        }
-    }
-    return right
-}
-
-fun quickSort(elements: DoubleArray, min: Int, max: Int) {
-    if (min < max) {
-        val border = partition(elements, min, max)
-        quickSort(elements, min, border)
-        quickSort(elements, border + 1, max)
-    }
-}
-
-fun quickSort(elements: DoubleArray) {
-    quickSort(elements, 0, elements.size - 1)
 }
 
 /**
@@ -251,7 +216,7 @@ fun quickSort(elements: DoubleArray) {
  */
 
 //производительность: O(N)
-//ресурсоемкость: O(2N)
+//ресурсоемкость: O(N)
 fun sortSequence(inputName: String, outputName: String) {
     val stat = mutableMapOf<Int, Int>()
     val numberList = mutableListOf<Int>()
