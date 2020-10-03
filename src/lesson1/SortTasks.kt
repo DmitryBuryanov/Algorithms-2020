@@ -35,7 +35,7 @@ import java.io.File
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
 //производительность: O(N*logN)
-//ресурсоемкость: O(2N)
+//ресурсоемкость: O(N)
 
 fun sortTimes(inputName: String, outputName: String) {
 
