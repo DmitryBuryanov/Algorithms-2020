@@ -5,7 +5,7 @@ package lesson4
  */
 class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
 
-    private class Node {
+    class Node {
         val children: MutableMap<Char, Node> = linkedMapOf()
     }
 
@@ -68,8 +68,77 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      *
      * Сложная
      */
-    override fun iterator(): MutableIterator<String> {
-        TODO()
+
+    override fun iterator(): MutableIterator<String> = TrieIterator()
+
+    inner class TrieIterator internal constructor() : MutableIterator<String> {
+        var current: Node? = null
+        var strSet: MutableSet<String> = mutableSetOf()
+        var strvalue = ""
+        var next: String? = null
+        val childrens: MutableSet<Char> = mutableSetOf()
+
+        init {
+            if (root.children.isNotEmpty()) current = root
+        }
+
+        override fun hasNext(): Boolean {
+            return next != null
+        }
+
+        fun childrensNotInSet(str: String): Boolean {
+            val node = findNode(str)
+            if (node!!.children.isEmpty()) return false
+            for (elements in node!!.children.keys) {
+                val newStr = str + elements
+                if (!strSet.contains(newStr)) return true
+            }
+            return false
+        }
+
+        override fun next(): String {
+            if (next1() == null) throw IllegalStateException()
+            else {
+                next = next1()
+                return next!!
+            }
+        }
+
+        fun next1(): String? {
+            if (current != null && current?.children?.isNotEmpty()!!) {
+                childrens.clear()
+                childrens.addAll(current!!.children.keys)
+                for (elements in childrens) {
+                    val new = strvalue + elements
+                    if (!strSet.contains(new)) {
+                        strvalue = new
+                        current = findNode(new)!!
+                        strSet.add(strvalue)
+                        return strvalue
+                    }
+                }
+            } else if (strvalue.isNotEmpty()) {
+                var parent = strvalue.substring(0, strvalue.length - 1)
+                var parentNode = findNode(parent)
+                if (childrensNotInSet(parent)) {
+                    current = parentNode
+                    strvalue = parent
+                } else {
+                    while (!childrensNotInSet(parent)) {
+                        current = parentNode
+                        strvalue = parent
+                        parent = strvalue.substring(0, strvalue.length - 1)
+                        parentNode = findNode(parent)
+                    }
+                }
+                next1()
+            }
+            return null
+        }
+
+        override fun remove() {
+            TODO()
+        }
     }
 
 }
