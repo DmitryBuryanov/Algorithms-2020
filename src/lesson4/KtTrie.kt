@@ -1,7 +1,6 @@
 package lesson4
 
 import java.lang.IllegalStateException
-import java.util.*
 
 /**
  * Префиксное дерево для строк
@@ -78,6 +77,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
     inner class IteratorKtTrie : MutableIterator<String> {
         private val listNodes: MutableList<Node> = mutableListOf(root)
         private val listStrings: MutableList<String> = mutableListOf("")
+        private val newList: MutableList<String> = mutableListOf()
         var i = 0
         var removesCount = 0
         var nextCount = 0
@@ -92,39 +92,51 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
                 if (findNode(newString) != null && newString !in listStrings) {
                     listNodes.add(findNode(newString)!!)
                     listStrings.add(newString)
+                    if (elements == 0.toChar()) {
+                        newList.add(newString.substring(0, newString.lastIndex))
+                    }
                 }
                 fillInLists(findNode(newString)!!)
-            }
-            if (listNodes.size == 1) {
-                listNodes.removeAt(0)
-                listStrings.removeAt(0)
             }
         }
 
         override fun hasNext(): Boolean {
-            return (i + 1 < listNodes.size && listNodes.size != 0)
+            return (i < newList.size && newList.size != 0)
         }
 
+        var next: String = ""
         override fun next(): String {
             if (!hasNext()) throw IllegalStateException()
             nextCount++
+            next = newList[i]
             i++
-            return listStrings[i]
+            return next
         }
 
         override fun remove() {
             if (removesCount == 0 && nextCount != 0) {
-                remove(listStrings[i])
-                for (j in i until listStrings.size - 1) {
-                    listStrings[j] = listStrings[j + 1]
-                    listNodes[j] = listNodes[j + 1]
-                }
-                listNodes.removeAt(listNodes.lastIndex)
-                listStrings.removeAt(listStrings.lastIndex)
-                i--
+                remove(next)
                 removesCount++
             } else throw IllegalStateException()
         }
     }
 
+}
+
+fun main() {
+    val kttrie: KtTrie = KtTrie()
+    val bnm =
+        ("ache, dhfcdgffh, bcg, hbhabgaac, d, h, bcdc, aedcegadbf, fecbehg, babfbbfabd, hbgb, fchbe, ghfheedggb, eheecb, bdhbcchc").split(
+            Regex(", ")
+        )
+    kttrie.addAll(bnm)
+
+    println(kttrie)
+    val xx = kttrie.iterator()
+    val yy = xx.next()
+    val zz = xx.next()
+    print("$yy, $zz")
+    xx.remove()
+    println(" ")
+    println(kttrie)
 }
