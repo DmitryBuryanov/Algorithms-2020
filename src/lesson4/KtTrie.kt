@@ -1,5 +1,8 @@
 package lesson4
 
+import java.lang.IllegalStateException
+import java.util.*
+
 /**
  * Префиксное дерево для строк
  */
@@ -69,75 +72,58 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      * Сложная
      */
 
-    override fun iterator(): MutableIterator<String> = TrieIterator()
+    override fun iterator(): MutableIterator<String> =
+        IteratorKtTrie()
 
-    inner class TrieIterator internal constructor() : MutableIterator<String> {
-        var current: Node? = null
-        var strSet: MutableSet<String> = mutableSetOf()
-        var strvalue = ""
-        var next: String? = null
-        val childrens: MutableSet<Char> = mutableSetOf()
+    inner class IteratorKtTrie : MutableIterator<String> {
+        private val listNodes: MutableList<Node> = mutableListOf(root)
+        private val listStrings: MutableList<String> = mutableListOf("")
+        var i = 0
+        var removesCount = 0
+        var nextCount = 0
 
         init {
-            if (root.children.isNotEmpty()) current = root
+            fillInLists(root)
+        }
+
+        fun fillInLists(currentNode: Node) {
+            for (elements in currentNode.children.keys) {
+                val newString = listStrings[listNodes.indexOf(currentNode)] + elements
+                if (findNode(newString) != null && newString !in listStrings) {
+                    listNodes.add(findNode(newString)!!)
+                    listStrings.add(newString)
+                }
+                fillInLists(findNode(newString)!!)
+            }
+            if (listNodes.size == 1) {
+                listNodes.removeAt(0)
+                listStrings.removeAt(0)
+            }
         }
 
         override fun hasNext(): Boolean {
-            return next != null
-        }
-
-        fun childrensNotInSet(str: String): Boolean {
-            val node = findNode(str)
-            if (node!!.children.isEmpty()) return false
-            for (elements in node!!.children.keys) {
-                val newStr = str + elements
-                if (!strSet.contains(newStr)) return true
-            }
-            return false
+            return (i + 1 < listNodes.size && listNodes.size != 0)
         }
 
         override fun next(): String {
-            if (next1() == null) throw IllegalStateException()
-            else {
-                next = next1()
-                return next!!
-            }
-        }
-
-        fun next1(): String? {
-            if (current != null && current?.children?.isNotEmpty()!!) {
-                childrens.clear()
-                childrens.addAll(current!!.children.keys)
-                for (elements in childrens) {
-                    val new = strvalue + elements
-                    if (!strSet.contains(new)) {
-                        strvalue = new
-                        current = findNode(new)!!
-                        strSet.add(strvalue)
-                        return strvalue
-                    }
-                }
-            } else if (strvalue.isNotEmpty()) {
-                var parent = strvalue.substring(0, strvalue.length - 1)
-                var parentNode = findNode(parent)
-                if (childrensNotInSet(parent)) {
-                    current = parentNode
-                    strvalue = parent
-                } else {
-                    while (!childrensNotInSet(parent)) {
-                        current = parentNode
-                        strvalue = parent
-                        parent = strvalue.substring(0, strvalue.length - 1)
-                        parentNode = findNode(parent)
-                    }
-                }
-                next1()
-            }
-            return null
+            if (!hasNext()) throw IllegalStateException()
+            nextCount++
+            i++
+            return listStrings[i]
         }
 
         override fun remove() {
-            TODO()
+            if (removesCount == 0 && nextCount != 0) {
+                remove(listStrings[i])
+                for (j in i until listStrings.size - 1) {
+                    listStrings[j] = listStrings[j + 1]
+                    listNodes[j] = listNodes[j + 1]
+                }
+                listNodes.removeAt(listNodes.lastIndex)
+                listStrings.removeAt(listStrings.lastIndex)
+                i--
+                removesCount++
+            } else throw IllegalStateException()
         }
     }
 
