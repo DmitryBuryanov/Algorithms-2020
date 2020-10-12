@@ -1,5 +1,6 @@
 package lesson4
 
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 import kotlin.math.abs
 import ru.spbstu.kotlin.generate.util.nextString
@@ -111,6 +112,18 @@ abstract class AbstractTrieTest {
         }
     }
 
+    protected fun myTrieIteratorTest() {
+        val kttrie = KtTrie()
+        kttrie.addAll(listOf("fghd", "rteie", "fgdhks", "qwerty"))
+        val iter = kttrie.iterator()
+        iter.next()
+        assertTrue(iter.hasNext())
+        assertEquals("fgdhks", iter.next())
+        iter.next()
+        iter.next()
+        assertThrows<IllegalStateException> { iter.next() }
+    }
+
     protected fun doIteratorRemoveTest() {
         implementationTest { create().iterator().remove() }
         val random = Random()
@@ -170,6 +183,17 @@ abstract class AbstractTrieTest {
             }
             println("All clear!")
         }
+    }
+
+    protected fun myTrieRemoveIteratorTest() {
+        val kttrie = KtTrie()
+        kttrie.addAll(listOf("fghd", "rteie", "fgdhks", "qwerty"))
+        val iter = kttrie.iterator()
+        iter.next()
+        iter.next()
+        iter.remove()
+        assertEquals(setOf("fghd", "rteie", "qwerty"), kttrie)
+        assertThrows<IllegalStateException> { iter.remove() }
     }
 
 }

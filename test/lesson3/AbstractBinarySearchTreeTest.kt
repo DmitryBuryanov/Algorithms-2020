@@ -4,6 +4,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.test.*
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import kotlin.IllegalStateException
 import kotlin.NoSuchElementException
 
@@ -164,6 +165,15 @@ abstract class AbstractBinarySearchTreeTest {
         }
     }
 
+    protected fun myRemoveTest() {
+        val kttree: KtBinarySearchTree<Int> = KtBinarySearchTree()
+        kttree.addAll(listOf(1, 10, 4, 7, 16, 18, 20, 354, 77))
+        kttree.remove(1)
+        kttree.remove(354)
+        assertTrue(kttree.size == 7)
+        assertFalse(kttree.contains(354) || kttree.contains(1))
+    }
+
     protected fun doIteratorTest() {
         implementationTest { create().iterator().hasNext() }
         implementationTest { create().iterator().next() }
@@ -205,6 +215,20 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+    }
+
+    protected fun myIteratorTest() {
+        val kttree: KtBinarySearchTree<Int> = KtBinarySearchTree()
+        kttree.addAll(listOf(1, 10, 4, 7, 16, 18, 20, 354, 77))
+        val iter = kttree.iterator()
+        val yy = iter.next()
+        assertEquals(1, yy)
+        for (i in 1..7) {
+            iter.next()
+        }
+        assertTrue(iter.hasNext())
+        assertEquals(354, iter.next())
+        assertThrows<IllegalStateException> { iter.next() }
     }
 
     protected fun doIteratorRemoveTest() {
@@ -272,6 +296,18 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+    }
+
+    protected fun myRemoveIteratorTest() {
+        val kttree: KtBinarySearchTree<Int> = KtBinarySearchTree()
+        kttree.addAll(listOf(1, 10, 4, 7, 16, 18, 20, 354, 77))
+        val iter = kttree.iterator()
+        for (i in 1..7) {
+            iter.next()
+        }
+        iter.remove()
+        assertFalse(kttree.contains(20))
+        assertThrows<IllegalStateException> { iter.remove() }
     }
 
     protected fun doSubSetTest() {

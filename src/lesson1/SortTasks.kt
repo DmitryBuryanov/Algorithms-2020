@@ -2,6 +2,7 @@
 
 package lesson1
 
+import java.io.DataOutput
 import java.io.File
 
 /**
@@ -168,19 +169,33 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 99.5
  * 121.3
  */
-//производительность:в зависимости от входных данных может изменяться от O(N * logN)
+//производительность:O(N)
 //ресурсоемкость: O(N)
 
 fun sortTemperatures(inputName: String, outputName: String) {
-    val tempList = mutableListOf<Double>()
+    val negativeArray: Array<Int> = Array(2731) { 0 }
+    val positiveArray: Array<Int> = Array(5001) { 0 }
     for (line in File(inputName).readLines()) {
-        tempList.add(line.toDouble())
+        if ((line.toDouble() * 10).toInt() >= 0) positiveArray[(line.toDouble() * 10).toInt()]++
+        else negativeArray[(line.toDouble() * 10).toInt() * -1]++
     }
-    tempList.sort()
     val writer = File(outputName).bufferedWriter()
-    for (line in tempList) {
-        writer.write(line.toString())
-        writer.newLine()
+    val new = negativeArray.reversed()
+    for (i in new.indices) {
+        if (new[i] != 0) {
+            for (j in 1..new[i]) {
+                writer.write(((2730 - i).toDouble() / -10).toString())
+                writer.newLine()
+            }
+        }
+    }
+    for (i in positiveArray.indices) {
+        if (positiveArray[i] != 0) {
+            for (j in 1..positiveArray[i]) {
+                writer.write((i.toDouble() / 10).toString())
+                writer.newLine()
+            }
+        }
     }
     writer.close()
 }

@@ -100,6 +100,9 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
      *
      * Средняя
      */
+
+    //Трудоемкость: O(высоты дерева)
+    //Ресурсоемкость: О(1)
     override fun remove(element: T): Boolean {
         val current = find(element) ?: return false
         if (element.compareTo(current.value) != 0)
@@ -120,36 +123,39 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
                 }
             }
         } else {
-            if (current.right!!.left == null) {
-                current.right!!.left = current.left
-                if (parent == null) root = current.right else {
-                    val result = parent.value.compareTo(current.value)
-                    if (result > 0) {
-                        parent.left = current.right
-                    } else {
-                        if (result < 0) {
-                            parent.right = current.right
+            val righter = current.right
+            if (righter != null) {
+                if (righter.left == null) {
+                    righter.left = current.left
+                    if (parent == null) root = current.right else {
+                        val result = parent.value.compareTo(current.value)
+                        if (result > 0) {
+                            parent.left = current.right
+                        } else {
+                            if (result < 0) {
+                                parent.right = current.right
+                            }
                         }
                     }
-                }
-            } else {
-                var leftmost = current.right!!.left
-                var leftmostParent = current.right
-                while (leftmost!!.left != null) {
-                    leftmostParent = leftmost
-                    leftmost = leftmost.left
-                }
-                leftmostParent!!.left = leftmost.right
-                leftmost.left = current.left
-                leftmost.right = current.right
-                if (parent == null) {
-                    root = leftmost
                 } else {
-                    val result = parent.value.compareTo(current.value)
-                    if (result > 0) {
-                        parent.left = leftmost
+                    var leftmost = righter.left
+                    var leftmostParent = righter
+                    while (leftmost!!.left != null) {
+                        leftmostParent = leftmost
+                        leftmost = leftmost.left
+                    }
+                    leftmostParent!!.left = leftmost.right
+                    leftmost.left = current.left
+                    leftmost.right = current.right
+                    if (parent == null) {
+                        root = leftmost
                     } else {
-                        if (result < 0) parent.right = leftmost
+                        val result = parent.value.compareTo(current.value)
+                        if (result > 0) {
+                            parent.left = leftmost
+                        } else {
+                            if (result < 0) parent.right = leftmost
+                        }
                     }
                 }
             }
@@ -191,6 +197,8 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          * Средняя
          */
 
+        //Трудоемкость: О(1)
+        //Ресурсоемкость:О(1)
         override fun hasNext(): Boolean {
             return next != null
         }
@@ -211,13 +219,16 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
 
         /** @return the next smallest number
          */
+        //Трудоемкость: О(высоты дерева)
+        //Ресурсоемкость:О(1)
         override fun next(): T {
             nextCount++
             if (!hasNext()) throw IllegalStateException()
             val r = next
 
-            if (next!!.right != null) {
-                next = next!!.right;
+            val righter = next?.right
+            if (righter != null) {
+                next = righter
                 while (next!!.left != null)
                     next = next!!.left;
                 removed = r!!.value
@@ -251,6 +262,8 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Сложная
          */
+        //Трудоемкость: О(высоты дерева)
+        //Ресурсоемкость:О(1)
         override fun remove() {
             if (removesCount == 0 && nextCount != 0) {
                 remove(removed)

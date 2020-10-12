@@ -86,6 +86,8 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             fillInLists(root)
         }
 
+        //Трудоемкость: О(длина самого длинного слова * количество всех возможных вариантов слов)
+        //Ресурсоемкость: О(количество всех возможных вариантов слов)
         fun fillInLists(currentNode: Node) {
             for (elements in currentNode.children.keys) {
                 val newString = listStrings[listNodes.indexOf(currentNode)] + elements
@@ -100,10 +102,14 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             }
         }
 
+        //Трудоемкость: О(1)
+        //Ресурсоемкость: О(1)
         override fun hasNext(): Boolean {
             return (i < newList.size && newList.size != 0)
         }
 
+        //Трудоемкость: О(1)
+        //Ресурсоемкость: О(1)
         var next: String = ""
         override fun next(): String {
             if (!hasNext()) throw IllegalStateException()
@@ -113,6 +119,8 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             return next
         }
 
+        //Трудоемкость: О(next.length)
+        //Ресурсоемкость: O(1)
         override fun remove() {
             if (removesCount == 0 && nextCount != 0) {
                 remove(next)
@@ -121,22 +129,4 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         }
     }
 
-}
-
-fun main() {
-    val kttrie: KtTrie = KtTrie()
-    val bnm =
-        ("ache, dhfcdgffh, bcg, hbhabgaac, d, h, bcdc, aedcegadbf, fecbehg, babfbbfabd, hbgb, fchbe, ghfheedggb, eheecb, bdhbcchc").split(
-            Regex(", ")
-        )
-    kttrie.addAll(bnm)
-
-    println(kttrie)
-    val xx = kttrie.iterator()
-    val yy = xx.next()
-    val zz = xx.next()
-    print("$yy, $zz")
-    xx.remove()
-    println(" ")
-    println(kttrie)
 }
