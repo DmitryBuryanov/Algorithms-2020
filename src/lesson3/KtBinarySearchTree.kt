@@ -105,6 +105,10 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
     //Ресурсоемкость: О(1)
     override fun remove(element: T): Boolean {
         val current = find(element) ?: return false
+        return removeKnown(current, element)
+    }
+
+    private fun removeKnown(current: Node<T>, element: T): Boolean {
         if (element.compareTo(current.value) != 0)
             return false
         val parent = findParent(current)
@@ -176,6 +180,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         var removesCount = 0
         var nextCount = 0
         lateinit var removed: T
+        lateinit var removedNode: Node<T>
 
         init {
             if (root != null) {
@@ -223,6 +228,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         //Ресурсоемкость:О(1)
         override fun next(): T {
             nextCount++
+            removesCount = 0
             if (!hasNext()) throw IllegalStateException()
             val r = next
 
@@ -232,6 +238,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
                 while (next!!.left != null)
                     next = next!!.left;
                 removed = r!!.value
+                removedNode = r
                 return removed
             }
             while (true) {
@@ -239,11 +246,13 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
                 if (parent == null) {
                     next = null
                     removed = r!!.value
+                    removedNode = r
                     return removed
                 }
                 if (parent.left == next) {
                     next = parent
                     removed = r!!.value
+                    removedNode = r
                     return removed
                 }
                 next = parent
@@ -266,7 +275,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         //Ресурсоемкость:О(1)
         override fun remove() {
             if (removesCount == 0 && nextCount != 0) {
-                remove(removed)
+                removeKnown(removedNode, removed)
                 removesCount++
             } else throw IllegalStateException()
         }

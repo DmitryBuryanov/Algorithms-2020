@@ -45,6 +45,7 @@ class KtBinarySearchTreeTest : AbstractBinarySearchTreeTest() {
     fun iteratorRemoveTest() {
         doIteratorRemoveTest()
         myRemoveIteratorTest()
+        myRemoveIteratorTest2()
     }
 
     @Test

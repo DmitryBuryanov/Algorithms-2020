@@ -310,6 +310,19 @@ abstract class AbstractBinarySearchTreeTest {
         assertThrows<IllegalStateException> { iter.remove() }
     }
 
+    protected fun myRemoveIteratorTest2() {
+        val kttree: KtBinarySearchTree<Int> = KtBinarySearchTree()
+        kttree.addAll(listOf(1, 10, 4, 7, 16, 18, 20, 354, 77))
+        val iter = kttree.iterator()
+        for (i in 1..5) {
+            iter.next()
+        }
+        iter.remove()
+        iter.next()
+        iter.remove()
+        assertTrue(kttree.size == 7)
+    }
+
     protected fun doSubSetTest() {
         implementationTest { create().subSet(0, 0) }
         assertEquals(

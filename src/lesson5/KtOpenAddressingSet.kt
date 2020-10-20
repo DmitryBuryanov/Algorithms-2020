@@ -90,7 +90,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             check(index != startingIndex) { "Table is full" }
             current = storage[index]
         }
-        deleted.add(storage[index] as T)
+        deleted.add(current as T)
         size--
         return true
     }
