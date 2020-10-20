@@ -114,6 +114,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         override fun next(): String {
             if (!hasNext()) throw IllegalStateException()
             nextCount++
+            removesCount = 0
             next = newList[i]
             i++
             return next
