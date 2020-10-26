@@ -1,5 +1,7 @@
 package lesson5
 
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import ru.spbstu.kotlin.generate.util.nextString
 import java.util.*
 import kotlin.math.abs
@@ -78,6 +80,14 @@ abstract class AbstractOpenAddressingSetTest {
         }
     }
 
+    protected fun doMyRemove() {
+        val ktOAS: KtOpenAddressingSet<Int> = KtOpenAddressingSet(16)
+        ktOAS.addAll(listOf(2, 17, 23, 68, 99, 22, 19, 44, 76, 31))
+        ktOAS.remove(22)
+        assertTrue(ktOAS.deleted.contains(22))
+        assertFalse(ktOAS.contains(22))
+    }
+
     protected fun doIteratorTest() {
         val random = Random()
         for (iteration in 1..100) {
@@ -118,6 +128,17 @@ abstract class AbstractOpenAddressingSetTest {
             }
             println("All clear!")
         }
+    }
+
+    protected fun doMyIterator() {
+        val ktOAS: KtOpenAddressingSet<Int> = KtOpenAddressingSet(16)
+        ktOAS.addAll(listOf(2, 17, 23, 68, 99, 22, 19, 44, 76, 31))
+        val iterator = ktOAS.iterator()
+        assertTrue(iterator.hasNext())
+        for (i in 1..10) {
+            assertDoesNotThrow { iterator.next() }
+        }
+        assertFalse(iterator.hasNext())
     }
 
     protected fun doIteratorRemoveTest() {
@@ -175,5 +196,19 @@ abstract class AbstractOpenAddressingSetTest {
             }
             println("All clear!")
         }
+    }
+
+    protected fun doMyIteratorRemove() {
+        val ktOAS: KtOpenAddressingSet<Int> = KtOpenAddressingSet(16)
+        ktOAS.addAll(listOf(2, 17, 23, 68, 99, 22, 19, 44, 76, 31))
+        val iterator = ktOAS.iterator()
+        assertThrows<IllegalStateException> { iterator.remove() }
+        for (i in 1..5) iterator.next()
+        iterator.remove()
+        assertThrows<IllegalStateException> { iterator.remove() }
+        assertTrue(ktOAS.size == 9)
+        iterator.next()
+        iterator.remove()
+        assertTrue(ktOAS.size == 8)
     }
 }
