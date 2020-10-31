@@ -118,8 +118,9 @@ fun binSearch(a: Array<Int>, key: Int): Int {
  *
  * Здесь ответ 2 + 3 + 4 + 1 + 2 = 12
  */
+//Трудоемкость: O(длина поля * ширина поля)
+//Ресурсоемкость: О(длина поля * ширина поля)
 fun shortestPathOnField(inputName: String): Int {
-    /*
     val lines = File(inputName).readLines()
     val counts = lines[0].split(" ")
     val a = counts.size
@@ -130,8 +131,25 @@ fun shortestPathOnField(inputName: String): Int {
         for (j in 0 until a) {
             array[i][j] = lines[i].split(" ")[j].toInt()
         }
-    }*/
-    TODO()
+    }
+    for (i in 0 until b) {
+        for (j in 0 until a) {
+            when {
+                (i == 0 && j == 0) -> {
+                    weightArray[i][j] = 0
+                }
+                (i == 0) -> {
+                    weightArray[i][j] = weightArray[i][j - 1] + array[i][j]
+                }
+                (j == 0) -> {
+                    weightArray[i][j] = weightArray[i - 1][j] + array[i][j]
+                }
+                else -> weightArray[i][j] =
+                    min(weightArray[i - 1][j - 1], min(weightArray[i - 1][j], weightArray[i][j - 1])) + array[i][j]
+            }
+        }
+    }
+    return weightArray[b - 1][a - 1]
 }
 
 // Задачу "Максимальное независимое множество вершин в графе без циклов"
