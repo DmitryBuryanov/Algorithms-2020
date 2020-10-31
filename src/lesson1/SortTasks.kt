@@ -2,7 +2,6 @@
 
 package lesson1
 
-import java.io.DataOutput
 import java.io.File
 
 /**

@@ -2,6 +2,10 @@
 
 package lesson7
 
+import java.io.File
+import java.lang.Integer.min
+import kotlin.math.max
+
 /**
  * Наибольшая общая подпоследовательность.
  * Средняя
@@ -14,8 +18,33 @@ package lesson7
  * Если есть несколько самых длинных общих подпоследовательностей, вернуть любую из них.
  * При сравнении подстрок, регистр символов *имеет* значение.
  */
+//Трудоемкость: O(first.length * second.length)
+//Ресурсоемкость: O(first.length * second.length)
 fun longestCommonSubSequence(first: String, second: String): String {
-    TODO()
+    val n = first.length
+    val m = second.length
+    val table: Array<Array<Int>> = Array(n + 1) { Array(m + 1) { 0 } }
+    for (i in 1..n) {
+        for (j in 1..m) {
+            if (first[i - 1] == second[j - 1]) table[i][j] = table[i - 1][j - 1] + 1
+            else table[i][j] = max(table[i - 1][j], table[i][j - 1])
+        }
+    }
+    var answer = ""
+    var i = n
+    var j = m
+    while (i > 0 && j > 0) {
+        when {
+            (first[i - 1] == second[j - 1]) -> {
+                answer += first[i - 1]
+                i--
+                j--
+            }
+            (table[i - 1][j] == table[i][j]) -> i--
+            else -> j--
+        }
+    }
+    return answer.reversed()
 }
 
 /**
@@ -31,6 +60,41 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
+    /*val n = list.size
+    val d = IntArray(n + 1)
+    val pos = IntArray(n + 1)
+    val prev = IntArray(n)
+    var length = 0
+
+    pos[0] = -1
+    d[0] = Int.MIN_VALUE
+    for (i in 1..n) d[i] = Int.MAX_VALUE
+    for (i in 0 until n) {
+        val j = binSearch(d.sorted().toTypedArray(), list[i])
+        if (d[j - 1] < list[i] && list[i] < d[j]) {
+            d[j] = list[i]
+            pos[j] = i
+            prev[i] = pos[j - 1]
+            length = max(length, j)
+        }
+    }
+    val answer = mutableListOf<Int>()
+    var p = pos[length]
+    while (p != -1) {
+        answer.add(list[p])
+        p = prev[p]
+    }
+    return answer.reversed()
+}
+
+fun binSearch(a: Array<Int>, key: Int): Int {
+    var l = -1
+    var r = a.size
+    while (l < r - 1) {
+        val m = (l + r) / 2
+        if (a[m] < key) l = m else r = m
+    }
+    return r*/
     TODO()
 }
 
@@ -55,6 +119,18 @@ fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
  * Здесь ответ 2 + 3 + 4 + 1 + 2 = 12
  */
 fun shortestPathOnField(inputName: String): Int {
+    /*
+    val lines = File(inputName).readLines()
+    val counts = lines[0].split(" ")
+    val a = counts.size
+    val b = lines.size
+    val array: Array<Array<Int>> = Array(b) { Array(a) { 0 } }
+    val weightArray: Array<Array<Int>> = Array(b) { Array(a) { 0 } }
+    for (i in 0 until b) {
+        for (j in 0 until a) {
+            array[i][j] = lines[i].split(" ")[j].toInt()
+        }
+    }*/
     TODO()
 }
 
