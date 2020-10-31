@@ -118,6 +118,7 @@ fun binSearch(a: Array<Int>, key: Int): Int {
  *
  * Здесь ответ 2 + 3 + 4 + 1 + 2 = 12
  */
+
 //Трудоемкость: O(длина поля * ширина поля)
 //Ресурсоемкость: О(длина поля * ширина поля)
 fun shortestPathOnField(inputName: String): Int {
@@ -151,6 +152,5 @@ fun shortestPathOnField(inputName: String): Int {
     }
     return weightArray[b - 1][a - 1]
 }
-
 // Задачу "Максимальное независимое множество вершин в графе без циклов"
 // смотрите в уроке 5
