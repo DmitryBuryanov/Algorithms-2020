@@ -75,30 +75,22 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         IteratorKtTrie()
 
     inner class IteratorKtTrie : MutableIterator<String> {
-        private val listNodes: MutableList<Node> = mutableListOf(root)
-        private val listStrings: MutableList<String> = mutableListOf("")
         private val newList: MutableList<String> = mutableListOf()
         var i = 0
         var removesCount = 0
         var nextCount = 0
 
+
         init {
-            fillInLists(root)
+            fillThatWeNeed(root, "")
         }
 
-        //Трудоемкость: О(длина самого длинного слова * количество всех возможных вариантов слов)
-        //Ресурсоемкость: О(количество всех возможных вариантов слов)
-        fun fillInLists(currentNode: Node) {
-            for (elements in currentNode.children.keys) {
-                val newString = listStrings[listNodes.indexOf(currentNode)] + elements
-                if (findNode(newString) != null && newString !in listStrings) {
-                    listNodes.add(findNode(newString)!!)
-                    listStrings.add(newString)
-                    if (elements == 0.toChar()) {
-                        newList.add(newString.substring(0, newString.lastIndex))
-                    }
-                }
-                fillInLists(findNode(newString)!!)
+        //трудоемкость: О(количество узлов)
+        //ресурсоемкость: О(количество нужных нам элементов дерева(заканчивающихся 0.toChar()))
+        fun fillThatWeNeed(node: Node, string: String) {
+            for (elements in node.children) {
+                if (elements.key == 0.toChar()) newList.add(string)
+                fillThatWeNeed(elements.value, string + elements.key)
             }
         }
 
@@ -112,6 +104,8 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         //Ресурсоемкость: О(1)
         var next: String = ""
         override fun next(): String {
+            println(newList.size)
+            println(i)
             if (!hasNext()) throw IllegalStateException()
             nextCount++
             removesCount = 0

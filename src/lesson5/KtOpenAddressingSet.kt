@@ -16,7 +16,10 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
 
     override var size: Int = 0
 
-    val deleted = mutableListOf<T>()
+    //содал пустой класс, чтобы не уделять большое количество времени поиску элементов в списке
+    class Deleted {}
+
+    val deleted = Deleted()
 
     /**
      * Индекс в таблице, начиная с которого следует искать данный элемент
@@ -32,7 +35,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
         var index = element.startingIndex()
         var current = storage[index]
         while (current != null) {
-            if (current == element && current !in deleted) {
+            if (current == element) {
                 return true
             }
             index = (index + 1) % capacity
@@ -55,7 +58,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
         val startingIndex = element.startingIndex()
         var index = startingIndex
         var current = storage[index]
-        while (current != null && current !in deleted) {
+        while (current != null && current != deleted) {
             if (current == element) {
                 return false
             }
@@ -63,7 +66,6 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             check(index != startingIndex) { "Table is full" }
             current = storage[index]
         }
-        if (element in deleted) deleted.remove(element)
         storage[index] = element
         size++
         return true
@@ -80,7 +82,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      *
      * Средняя
      */
-    //трудоемкость: O(количество слов, хэш-функция которых совпадает)
+    //трудоемкость: O(1) в среднем, в худшем случае O(capacity)
     //ресурсоемкость: О(1)
     override fun remove(element: T): Boolean {
         if (!contains(element)) return false
@@ -92,7 +94,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             check(index != startingIndex) { "Table is full" }
             current = storage[index]
         }
-        deleted.add(current as T)
+        storage[index] = deleted
         size--
         return true
     }
@@ -124,7 +126,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
         //ресурсоемкость: О(1)
         override fun next(): T {
             if (!hasNext()) throw IllegalStateException()
-            while (storage[i] == null || storage[i] in deleted) {
+            while (storage[i] == null || storage[i] == deleted) {
                 i++
             }
             next = storage[i] as T
@@ -135,7 +137,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             return next
         }
 
-        //трудоемкость: O(количество слов, хэш-функция которых совпадает)
+        //трудоемкость: O(1) в среднем, в худшем случае O(capacity)
         //ресурсоемкость: О(1)
         override fun remove() {
             if (removesCount == 0 && nextCount != 0) {

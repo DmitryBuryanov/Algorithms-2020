@@ -84,7 +84,6 @@ abstract class AbstractOpenAddressingSetTest {
         val ktOAS: KtOpenAddressingSet<Int> = KtOpenAddressingSet(16)
         ktOAS.addAll(listOf(2, 17, 23, 68, 99, 22, 19, 44, 76, 31))
         ktOAS.remove(22)
-        assertTrue(ktOAS.deleted.contains(22))
         assertFalse(ktOAS.contains(22))
     }
 
