@@ -98,7 +98,9 @@ abstract class AbstractTrieTest {
             }
             val trieIter = trieSet.iterator()
             println("Checking if the iterator traverses the entire set...")
+            var count = 0
             while (trieIter.hasNext()) {
+                count++
                 controlSet.remove(trieIter.next())
             }
             assertTrue(
