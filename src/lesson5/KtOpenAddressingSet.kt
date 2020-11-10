@@ -16,10 +16,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
 
     override var size: Int = 0
 
-    //содал пустой класс, чтобы не уделять большое количество времени поиску элементов в списке
-    class Deleted {}
-
-    val deleted = Deleted()
+    val deleted = object {}
 
     /**
      * Индекс в таблице, начиная с которого следует искать данный элемент
