@@ -61,6 +61,9 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * то вернуть ту, в которой числа расположены раньше (приоритет имеют первые числа).
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
+
+//трудоемкость: O(N*logN)
+//ресурсоемкость:0(N)
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
 
     val array1: Array<Int> = Array(list.size) { -1 }
@@ -93,16 +96,6 @@ fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
     }
 
     return ans.reversed()
-}
-
-fun binSearch(a: Array<Int>, key: Int): Int {
-    var l = -1
-    var r = a.size
-    while (l < r - 1) {
-        val m = (l + r) / 2
-        if (a[m] < key) l = m else r = m
-    }
-    return r
 }
 
 /**
