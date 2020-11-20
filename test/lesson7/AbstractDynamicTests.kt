@@ -43,6 +43,7 @@ abstract class AbstractDynamicTests {
         assertEquals(listOf(1), longestIncreasingSubSequence(listOf(1)))
         assertEquals(listOf(1, 2), longestIncreasingSubSequence(listOf(1, 2)))
         assertEquals(listOf(2), longestIncreasingSubSequence(listOf(2, 1)))
+        assertEquals(listOf(2, 3, 7, 8), longestIncreasingSubSequence(listOf(2, 7, 3, 9, 7, 6, 8, 6)))
         assertEquals(
             listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
             longestIncreasingSubSequence(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))

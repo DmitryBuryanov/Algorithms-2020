@@ -4,7 +4,9 @@ package lesson7
 
 import java.io.File
 import java.lang.Integer.min
+import java.util.*
 import kotlin.math.max
+
 
 /**
  * Наибольшая общая подпоследовательность.
@@ -60,31 +62,37 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
-    /*val n = list.size
-    val d = IntArray(n + 1)
-    val pos = IntArray(n + 1)
-    val prev = IntArray(n)
-    var length = 0
 
-    pos[0] = -1
-    d[0] = Int.MIN_VALUE
-    for (i in 1..n) d[i] = Int.MAX_VALUE
-    for (i in 0 until n) {
-        val j = binSearch(d.sorted().toTypedArray(), list[i])
-        if (d[j - 1] < list[i] && list[i] < d[j]) {
-            d[j] = list[i]
-            pos[j] = i
-            prev[i] = pos[j - 1]
-            length = max(length, j)
+    val array1: Array<Int> = Array(list.size) { -1 }
+    val array2: Array<Int> = Array(list.size) { 1 }
+    var maxlength = 0
+
+    for (i in list.indices) {
+        for (j in i - 1 downTo 0) {
+            if (list[i] > list[j]) {
+                if (array2[i] <= array2[j] + 1) {
+                    array2[i] = array2[j] + 1
+                    array1[i] = j
+                }
+            }
+        }
+        maxlength = max(maxlength, array2[i])
+    }
+
+    val ans: MutableList<Int> = mutableListOf()
+
+    for (i in list.indices) {
+        if (array2[i] == maxlength) {
+            var curr = i
+            while (curr != -1) {
+                ans.add(list[curr])
+                curr = array1[curr]
+            }
+            break
         }
     }
-    val answer = mutableListOf<Int>()
-    var p = pos[length]
-    while (p != -1) {
-        answer.add(list[p])
-        p = prev[p]
-    }
-    return answer.reversed()
+
+    return ans.reversed()
 }
 
 fun binSearch(a: Array<Int>, key: Int): Int {
@@ -94,8 +102,7 @@ fun binSearch(a: Array<Int>, key: Int): Int {
         val m = (l + r) / 2
         if (a[m] < key) l = m else r = m
     }
-    return r*/
-    TODO()
+    return r
 }
 
 /**
